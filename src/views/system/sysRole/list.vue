@@ -11,18 +11,26 @@
           </el-col>
         </el-row>
         <el-row style="display:flex">
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="fetchData()">検索</el-button>
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="fetchData()">検 索</el-button>
           <el-button icon="el-icon-refresh" size="mini" @click="resetData">リセット</el-button>
         </el-row>
       </el-form>
     </div>
+    <!--検索エリアーEND-->
+    <div class="tools-div">
+      <el-button type="success" icon="el-icon-plus" size="mini" @click="addRole">追 加</el-button>
+      <el-button class="btn-add" size="mini" @click="batchRemove">批量删除</el-button>
+    </div>
+    <!--追加END-->
     <el-table
       v-loading="listLoading"
       :data="list"
       stripe
       border
       style="width: 100%;margin-top: 10px;"
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column type="selection"/>
 
       <el-table-column
         label="番号"
@@ -36,16 +44,34 @@
 
       <el-table-column prop="roleName" label="ロール名称"/>
       <el-table-column prop="roleCode" label="ロールコード"/>
+      <el-table-column prop="description" label="ロール説明"/>
       <el-table-column prop="createTime" label="CreatTime" width="160"/>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" title="編集" @click="edit(scope.row.id)"/>
-          <el-button type="danger" icon="el-icon-delete" size="mini" title="削除" @click="removeDataById(scope.row.id)"/>
+          <el-button type="primary" icon="el-icon-edit" size="mini" title="編 集" @click="editRole(scope.row.id)"/>
+          <el-button type="danger" icon="el-icon-delete" size="mini" title="削 除" @click="removeDataById(scope.row.id)"/>
         </template>
       </el-table-column>
     </el-table>
-
-    <!--ページネーション-->
+    <!--メインテーブルEND-->
+    <el-dialog title="新規追加/更新" :visible.sync="dialogVisible" width="40%">
+      <el-form ref="dataForm" :model="sysRole" label-width="150px" size="small" style="padding-right: 40px;">
+        <el-form-item label="ロール名称">
+          <el-input v-model="sysRole.roleName"/>
+        </el-form-item>
+        <el-form-item label="ロールコード">
+          <el-input v-model="sysRole.roleCode"/>
+        </el-form-item>
+        <el-form-item label="ロール説明">
+          <el-input v-model="sysRole.description"/>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" icon="el-icon-refresh-right" @click="dialogVisible = false">キャンセル</el-button>
+        <el-button type="primary" icon="el-icon-check" size="small" @click="saveOrUpdate()">確 定</el-button>
+      </span>
+    </el-dialog>
+    <!--ダイアローグEND-->
     <el-pagination
       :current-page="page"
       :total="total"
@@ -54,11 +80,13 @@
       layout="total, prev, pager, next, jumper"
       @current-change="fetchData"
     />
+    <!--ページネーションEND-->
   </div>
 </template>
 <script>
 // jsファイルをimport
 import api from '@/api/role/role'
+import item from '@/layout/components/Sidebar/Item'
 
 export default {
   data() {
@@ -69,7 +97,10 @@ export default {
       total: 0, // 全ページ数
       page: 1, // currentページ、デフォルトは1にする
       size: 5, // ページの容量、デフォルトは2にする
-      searchObj: {} // 条件で探すデータ、Objectで表示
+      searchObj: {}, // 条件で探すデータ、Objectで表示
+      dialogVisible: false,
+      sysRole: {},
+      idList: []
     }
   },
   // lifeMethod
@@ -77,6 +108,94 @@ export default {
     this.fetchData()
   },
   methods: {
+    // 追加ボタンん
+    addRole() {
+      this.dialogVisible = true
+      this.sysRole = {}
+    },
+    // 更新ボタン
+    editRole(id) {
+      api.getRoleById(id).then(res => {
+        // 1,データに値を入れる
+        this.sysRole = res.data
+        // 2,ダイアローグ表示
+        this.dialogVisible = true
+      })
+    },
+    // 複数選択した際の動作
+    handleSelectionChange(selectValue) {
+      this.idList = selectValue
+    },
+    // 複数削除ボタン
+    batchRemove() {
+      if (this.idList.length === 0) {
+        this.$message(
+          {
+            type: 'warning',
+            message: '選択してください!!!!!'
+          }
+        )
+        return
+      }
+      this.$confirm('データを削除しますか?', '確認', {
+        confirmButtonText: '確定',
+        cancelButtonText: 'キャンセル',
+        type: 'warning'
+      }).then(() => {
+        const idList = []
+        // idを配列の格納
+        this.idList.forEach(item => {
+          idList.push(item.id)
+        })
+        api.removeRoleById(idList)
+          .then(res => {
+            this.$message({
+              type: 'success',
+              message: '削除成功しました!'
+            })
+            this.fetchData()
+          })
+      })
+    },
+    // saveOrUpdate
+    saveOrUpdate() {
+      // sysRoleにidがあれば更新、なければ新規追加
+      if (!this.sysRole.id) {
+        this.saveRole(this.sysRole)
+      } else {
+        this.updateRole(this.sysRole)
+      }
+    },
+    // ユーザーロールを追加
+    saveRole(sysRole) {
+      // 1,保存作業
+      api.saveRole(sysRole).then(res => {
+        // 2,結果を表示
+        this.$message({
+          type: 'success',
+          message: '新規追加しました!'
+        })
+        // 3,ダイアローグ閉じる
+        this.dialogVisible = false
+        // 4,ページをリーロドする
+        this.fetchData()
+      })
+    },
+    // ユーザーロールをupdate
+    updateRole(sysRole) {
+      // 1,更新作業
+      api.updateRole(sysRole).then(res => {
+        // 2,結果を表示
+        this.$message({
+          type: 'success',
+          message: '更新しました!'
+        })
+        // 3,ダイアローグ閉じる
+        this.dialogVisible = false
+        // 4,ページをリーロドする
+        this.fetchData()
+      })
+    },
     // リセット
     resetData() {
       // inputをリッセット

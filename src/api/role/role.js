@@ -18,9 +18,39 @@ export default {
   removeRoleById(id) {
     return request({
       // APIのpath
-      // url: '/admin/system/sysRole' + page + '/' + size,
       url: `${API_PATH}/remove/${id}`,
       method: 'delete' // httpMethod
+    })
+  },
+  saveRole(role) {
+    return request({
+      // APIのpath
+      url: `${API_PATH}/save`,
+      method: 'post', // httpMethod
+      data: role
+    })
+  },
+  getRoleById(id) {
+    return request({
+      // APIのpath
+      url: `${API_PATH}/get/${id}`,
+      method: 'get' // httpMethod
+    })
+  },
+  updateRole(role) {
+    return request({
+      // APIのpath
+      url: `${API_PATH}/update`,
+      method: 'put', // httpMethod
+      data: role
+    })
+  },
+  batchRemove(idList) {
+    console.log(idList)
+    return request({
+      url: `${API_PATH}/batchRemove`,
+      method: 'delete', // httpMethod
+      data: idList
     })
   }
 }
