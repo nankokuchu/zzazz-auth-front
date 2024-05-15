@@ -6,7 +6,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="ロール名称">
-              <el-input v-model="searchObj.roleName" style="width: 100%" placeholder="ロール名称" />
+              <el-input v-model="searchObj.roleName" style="width: 100%" placeholder="ロール名称"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -34,13 +34,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="roleName" label="ロール名称" />
-      <el-table-column prop="roleCode" label="ロールコード" />
-      <el-table-column prop="createTime" label="CreatTime" width="160" />
+      <el-table-column prop="roleName" label="ロール名称"/>
+      <el-table-column prop="roleCode" label="ロールコード"/>
+      <el-table-column prop="createTime" label="CreatTime" width="160"/>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" title="編集" @click="edit(scope.row.id)" />
-          <el-button type="danger" icon="el-icon-delete" size="mini" title="削除" @click="removeDataById(scope.row.id)" />
+          <el-button type="primary" icon="el-icon-edit" size="mini" title="編集" @click="edit(scope.row.id)"/>
+          <el-button type="danger" icon="el-icon-delete" size="mini" title="削除" @click="removeDataById(scope.row.id)"/>
         </template>
       </el-table-column>
     </el-table>
@@ -68,7 +68,7 @@ export default {
       list: [], // 取得したデータを保管する
       total: 0, // 全ページ数
       page: 1, // currentページ、デフォルトは1にする
-      size: 2, // ページの容量、デフォルトは2にする
+      size: 5, // ページの容量、デフォルトは2にする
       searchObj: {} // 条件で探すデータ、Objectで表示
     }
   },
@@ -95,6 +95,23 @@ export default {
           this.list = res.data.records
           this.total = res.data.total
         })
+    },
+    // idで削除
+    removeDataById(id) {
+      this.$confirm('データを削除しますか?', '確認', {
+        confirmButtonText: '確定',
+        cancelButtonText: 'キャンセル',
+        type: 'warning'
+      }).then(() => {
+        api.removeRoleById(id)
+          .then(res => {
+            this.$message({
+              type: 'success',
+              message: '削除成功しました!'
+            })
+            this.fetchData()
+          })
+      })
     }
   }
 }
