@@ -10,9 +10,17 @@ export default {
       // APIのpath
       // url: '/admin/system/sysRole' + page + '/' + size,
       url: `${API_PATH}/${page}/${size}`,
-      method: 'get',
+      method: 'get', // httpMethod
       // Parameter
       params: searchObj
+    })
+  },
+  removeRoleById(id) {
+    return request({
+      // APIのpath
+      // url: '/admin/system/sysRole' + page + '/' + size,
+      url: `${API_PATH}/remove/${id}`,
+      method: 'delete' // httpMethod
     })
   }
 }
