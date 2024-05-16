@@ -85,8 +85,7 @@
 </template>
 <script>
 // jsファイルをimport
-import api from '@/api/role/role'
-import item from '@/layout/components/Sidebar/Item'
+import api from '@/api/system/role'
 
 export default {
   data() {
@@ -100,7 +99,7 @@ export default {
       searchObj: {}, // 条件で探すデータ、Objectで表示
       dialogVisible: false,
       sysRole: {},
-      idList: []
+      roleList: []
     }
   },
   // lifeMethod
@@ -124,11 +123,11 @@ export default {
     },
     // 複数選択した際の動作
     handleSelectionChange(selectValue) {
-      this.idList = selectValue
+      this.roleList = selectValue
     },
     // 複数削除ボタン
     batchRemove() {
-      if (this.idList.length === 0) {
+      if (this.roleList.length === 0) {
         this.$message(
           {
             type: 'warning',
@@ -144,10 +143,11 @@ export default {
       }).then(() => {
         const idList = []
         // idを配列の格納
-        this.idList.forEach(item => {
-          idList.push(item.id)
+        this.roleList.forEach((role) => {
+          idList.push(role.id)
         })
-        api.removeRoleById(idList)
+        console.log(idList)
+        api.batchRemove(idList)
           .then(res => {
             this.$message({
               type: 'success',
