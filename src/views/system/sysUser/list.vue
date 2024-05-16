@@ -6,7 +6,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="キーワード">
-              <el-input v-model="searchObj.keyword" style="width: 95%" placeholder="ユーザー名/名前/電話番号"/>
+              <el-input v-model="searchObj.keyword" style="width: 95%" placeholder="ユーザー名/名前/電話番号" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -47,28 +47,28 @@
         width="70"
         align="center"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           {{ (page - 1) * size + scope.$index + 1 }}
         </template>
       </el-table-column>
 
-      <el-table-column prop="username" label="ユーザー名" width="180"/>
-      <el-table-column prop="name" label="名前" width="200"/>
-      <el-table-column prop="phone" label="電話番号" width="150"/>
+      <el-table-column prop="username" label="ユーザー名" width="180" />
+      <el-table-column prop="name" label="名前" width="200" />
+      <el-table-column prop="phone" label="電話番号" width="150" />
       <el-table-column label="ステータス" width="100">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-switch
             v-model="scope.row.status === 1"
             @change="switchStatus(scope.row)"
           />
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="CREAT-TIME"/>
+      <el-table-column prop="createTime" label="CREAT-TIME" />
 
       <el-table-column label="操作" align="center" fixed="right">
-        <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" title="編集" @click="editUser(scope.row.id)"/>
-          <el-button type="danger" icon="el-icon-delete" size="mini" title="削除" @click="removeDataById(scope.row.id)"/>
+        <template v-slot="scope">
+          <el-button type="primary" icon="el-icon-edit" size="mini" title="編集" @click="editUser(scope.row.id)" />
+          <el-button type="danger" icon="el-icon-delete" size="mini" title="削除" @click="removeDataById(scope.row.id)" />
         </template>
       </el-table-column>
     </el-table>
@@ -86,16 +86,16 @@
     <el-dialog title="追加/更新" :visible.sync="dialogVisible" width="40%">
       <el-form ref="dataForm" :model="sysUser" label-width="100px" size="small" style="padding-right: 40px;">
         <el-form-item label="ユーザー名" prop="username">
-          <el-input v-model="sysUser.username"/>
+          <el-input v-model="sysUser.username" />
         </el-form-item>
         <el-form-item v-if="!sysUser.id" label="パースワード" prop="password">
-          <el-input v-model="sysUser.password" type="password"/>
+          <el-input v-model="sysUser.password" type="password" />
         </el-form-item>
         <el-form-item label="名前" prop="name">
-          <el-input v-model="sysUser.name"/>
+          <el-input v-model="sysUser.name" />
         </el-form-item>
         <el-form-item label="電話番号" prop="phone">
-          <el-input v-model="sysUser.phone"/>
+          <el-input v-model="sysUser.phone" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -163,7 +163,7 @@ export default {
         type: 'warning'
       }).then(() => {
         api.removeUserById(id)
-          .then(res => {
+          .then(() => {
             this.$message({
               type: 'success',
               message: '削除成功しました!'
@@ -187,7 +187,7 @@ export default {
     },
     saveUser(sysUser) {
       // 1,保存作業
-      api.saveUser(sysUser).then(res => {
+      api.saveUser(sysUser).then(() => {
         // 2,結果を表示
         this.$message({
           type: 'success',
@@ -201,7 +201,7 @@ export default {
     },
     updateUser(sysUser) {
       // 1,更新作業
-      api.updateUser(sysUser).then(res => {
+      api.updateUser(sysUser).then(() => {
         // 2,結果を表示
         this.$message({
           type: 'success',
@@ -216,15 +216,13 @@ export default {
     switchStatus(sysUser) {
       sysUser.status = sysUser.status ? 0 : 1
       // 1,更新作業
-      api.updateUser(sysUser).then(res => {
-        // 2,結果を表示
+      api.updateUser(sysUser).then(() => {
+        // 2,結果を通知
         this.$message({
           type: 'success',
           message: '更新しました!'
         })
-        // 3,ダイアローグ閉じる
-        this.dialogVisible = false
-        // 4,ページをリーロドする
+        // 3,ページをリーロドする
         this.fetchData()
       })
     }

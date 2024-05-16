@@ -6,7 +6,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="ロール名称">
-              <el-input v-model="searchObj.roleName" style="width: 100%" placeholder="ロール名称"/>
+              <el-input v-model="searchObj.roleName" style="width: 100%" placeholder="ロール名称" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -19,7 +19,7 @@
     <!--検索エリアーEND-->
     <div class="tools-div">
       <el-button type="success" icon="el-icon-plus" size="mini" @click="addRole">追 加</el-button>
-      <el-button class="btn-add" size="mini" @click="batchRemove">批量删除</el-button>
+      <el-button class="btn-add" size="mini" @click="batchRemove">一括删除</el-button>
     </div>
     <!--追加END-->
     <el-table
@@ -30,26 +30,28 @@
       style="width: 100%;margin-top: 10px;"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection"/>
+      <el-table-column type="selection" />
 
       <el-table-column
         label="番号"
         width="70"
         align="center"
       >
-        <template slot-scope="scope">
+        <template v-slot="scope">
           {{ (page - 1) * size + scope.$index + 1 }}
         </template>
       </el-table-column>
 
-      <el-table-column prop="roleName" label="ロール名称"/>
-      <el-table-column prop="roleCode" label="ロールコード"/>
-      <el-table-column prop="description" label="ロール説明"/>
-      <el-table-column prop="createTime" label="CreatTime" width="160"/>
+      <el-table-column prop="roleName" label="ロール名称" />
+      <el-table-column prop="roleCode" label="ロールコード" />
+      <el-table-column prop="description" label="ロール説明" />
+      <el-table-column prop="createTime" label="CreatTime" width="160" />
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" title="編 集" @click="editRole(scope.row.id)"/>
-          <el-button type="danger" icon="el-icon-delete" size="mini" title="削 除" @click="removeDataById(scope.row.id)"/>
+          <el-button type="primary" icon="el-icon-edit" size="mini" title="編 集" @click="editRole(scope.row.id)" />
+          <el-button type="danger" icon="el-icon-delete" size="mini" title="削 除"
+                     @click="removeDataById(scope.row.id)"
+          />
         </template>
       </el-table-column>
     </el-table>
@@ -57,13 +59,13 @@
     <el-dialog title="新規追加/更新" :visible.sync="dialogVisible" width="40%">
       <el-form ref="dataForm" :model="sysRole" label-width="150px" size="small" style="padding-right: 40px;">
         <el-form-item label="ロール名称">
-          <el-input v-model="sysRole.roleName"/>
+          <el-input v-model="sysRole.roleName" />
         </el-form-item>
         <el-form-item label="ロールコード">
-          <el-input v-model="sysRole.roleCode"/>
+          <el-input v-model="sysRole.roleCode" />
         </el-form-item>
         <el-form-item label="ロール説明">
-          <el-input v-model="sysRole.description"/>
+          <el-input v-model="sysRole.description" />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
