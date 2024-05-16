@@ -52,5 +52,20 @@ export default {
       method: 'delete', // httpMethod
       data: idList
     })
+  },
+  // ユーザーIDで、該当するユーザーの全てのロールを取得
+  getRolesByUserId(userId) {
+    return request({
+      url: `${API_PATH}/toAssign/${userId}`,
+      method: 'get'
+    })
+  },
+  // ユーザにロールを割り当てる
+  assignRoles(assignRoleVo) {
+    return request({
+      url: `${API_PATH}/doAssign`,
+      method: 'post',
+      data: assignRoleVo
+    })
   }
 }

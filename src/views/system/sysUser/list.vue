@@ -69,10 +69,11 @@
         <template v-slot="scope">
           <el-button type="primary" icon="el-icon-edit" size="mini" title="編集" @click="editUser(scope.row.id)" />
           <el-button type="danger" icon="el-icon-delete" size="mini" title="削除" @click="removeDataById(scope.row.id)" />
+          <el-button type="warning" icon="el-icon-baseball" size="mini" title="ロール設定" @click="showAssignRole(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
-
+    <!--メインテーブルEND-->
     <el-pagination
       :current-page="page"
       :total="total"
@@ -103,10 +104,33 @@
         <el-button type="primary" icon="el-icon-check" size="small" @click="saveOrUpdateUser()">保 存</el-button>
       </span>
     </el-dialog>
+    <!--追加・更新ダイアローグEND-->
+
+    <el-dialog title="ロール設定" :visible.sync="dialogRoleVisible">
+      <el-form label-width="100px">
+        <el-form-item label="ユーザー名">
+          <el-input disabled :value="sysUser.username"></el-input>
+        </el-form-item>
+
+        <el-form-item label="ロール名">
+          <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全て</el-checkbox>
+          <div style="margin: 15px 0;"></div>
+          <el-checkbox-group v-model="userRoleIds" @change="handleCheckedChange">
+            <el-checkbox v-for="role in allRoles" :key="role.id" :label="role.id">{{ role.roleName }}</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button size="small" @click="dialogRoleVisible = false">キャンセル</el-button>
+        <el-button type="primary" size="small" @click="assignRole">保 存</el-button>
+      </div>
+    </el-dialog>
+    <!--ロール設定ダイアローグEND-->
   </div>
 </template>
 <script>
 import api from '@/api/system/user'
+import roleApi from '@/api/system/role'
 
 const defaultForm = {
   id: '',
@@ -130,13 +154,25 @@ export default {
 
       dialogVisible: false,
       sysUser: defaultForm,
-      saveBtnDisabled: false
+      saveBtnDisabled: false,
+
+      dialogRoleVisible: false,
+      allRoles: [],
+      userRoleIds: [],
+      isIndeterminate: false,
+      checkAll: false
     }
   },
   // lifeMethod
   created() {
     this.fetchData()
   },
+
+  // lifeMethod
+  mounted() {
+    console.log('list mounted......')
+  },
+
   methods: {
     fetchData(pageNum = 1) {
       this.page = pageNum
@@ -153,8 +189,8 @@ export default {
       this.fetchData()
     },
     addUser() {
+      this.sysUser = {}
       this.dialogVisible = true
-      this.sysRole = {}
     },
     removeDataById(id) {
       this.$confirm('データを削除しますか?', '確認', {
@@ -224,6 +260,38 @@ export default {
         })
         // 3,ページをリーロドする
         this.fetchData()
+      })
+    },
+    // ロールを表示する
+    showAssignRole(row) {
+      this.sysUser = row
+      this.allRoles = {}
+      this.dialogRoleVisible = true
+      roleApi.getRolesByUserId(row.id).then(res => {
+        this.allRoles = res.data.allRoles
+        this.userRoleIds = res.data.userRoleIds
+        this.checkAll = this.userRoleIds.length === this.allRoles.length
+        this.isIndeterminate = this.userRoleIds.length > 0 && this.userRoleIds.length < this.allRoles.length
+      })
+    },
+    handleCheckAllChange(value) {
+      this.userRoleIds = value ? this.allRoles.map(item => item.id) : []
+      this.isIndeterminate = false
+    },
+    handleCheckedChange(value) {
+      const { userRoleIds, allRoles } = this
+      this.checkAll = userRoleIds.length === allRoles.length && allRoles.length > 0
+      this.isIndeterminate = userRoleIds.length > 0 && userRoleIds.length < allRoles.length
+    },
+    assignRole() {
+      const assignRoleVo = {
+        userId: this.sysUser.id,
+        roleIdList: this.userRoleIds
+      }
+      roleApi.assignRoles(assignRoleVo).then(res => {
+        this.$message.success('更新しました!')
+        this.dialogRoleVisible = false
+        this.fetchData(this.page)
       })
     }
   }
