@@ -60,19 +60,20 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/system/sysRole',
     name: 'System',
-    meta: { title: 'システム管理', icon: 'el-icon-s-help' },
+    alwaysShow: true,
+    meta: { title: 'システム管理', icon: 'el-icon-s-tools' },
     children: [
-      {
-        path: 'sysRole',
-        name: 'SysRole',
-        component: () => import('@/views/system/sysRole/list'),
-        meta: { title: 'ユーザーロール管理', icon: 'table' }
-      },
       {
         path: 'sysUser',
         name: 'SysUser',
         component: () => import('@/views/system/sysUser/list'),
-        meta: { title: 'ユーザー管理', icon: 'tree' }
+        meta: { title: 'ユーザー管理', icon: 'el-icon-s-custom' }
+      },
+      {
+        path: 'sysRole',
+        name: 'SysRole',
+        component: () => import('@/views/system/sysRole/list'),
+        meta: { title: 'ユーザーロール管理', icon: 'el-icon-user-solid' }
       }
     ]
   },
