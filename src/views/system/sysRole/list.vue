@@ -68,7 +68,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" icon="el-icon-refresh-right" @click="dialogVisible = false">キャンセル</el-button>
-        <el-button type="primary" icon="el-icon-check" size="small" @click="saveOrUpdate()">確 定</el-button>
+        <el-button type="primary" icon="el-icon-check" size="small" @click="saveOrUpdate()">保 存</el-button>
       </span>
     </el-dialog>
     <!--ダイアローグEND-->
