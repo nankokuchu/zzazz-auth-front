@@ -74,6 +74,13 @@ export const constantRoutes = [
         name: 'SysRole',
         component: () => import('@/views/system/sysRole/list'),
         meta: { title: 'ユーザーロール管理', icon: 'el-icon-user-solid' }
+      },
+      // メニュー追加
+      {
+        path: 'sysMenu',
+        name: 'sysMenu',
+        component: () => import('@/views/system/sysMenu/list'),
+        meta: { title: 'メニュー管理', icon: 'el-icon-user-solid' }
       }
     ]
   },
