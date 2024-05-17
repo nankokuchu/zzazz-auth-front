@@ -36,5 +36,18 @@ export default {
       method: 'put',
       data: sysMenu
     })
+  },
+  toAssign(roleId) {
+    return request({
+      url: `${API_PATH}/toAssign/${roleId}`,
+      method: 'get'
+    })
+  },
+  doAssign(assignMenuVo) {
+    return request({
+      url: `${API_PATH}/doAssign`,
+      method: 'post',
+      data: assignMenuVo
+    })
   }
 }
