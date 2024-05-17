@@ -49,9 +49,8 @@
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" size="mini" title="編 集" @click="editRole(scope.row.id)" />
-          <el-button type="danger" icon="el-icon-delete" size="mini" title="削 除"
-                     @click="removeDataById(scope.row.id)"
-          />
+          <el-button type="danger" icon="el-icon-delete" size="mini" title="削 除" @click="removeDataById(scope.row.id)" />
+          <el-button type="warning" icon="el-icon-baseball" size="mini" title="ロール給与" @click="showAssignAuth(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
@@ -109,6 +108,9 @@ export default {
     this.fetchData()
   },
   methods: {
+    showAssignAuth(row) {
+      this.$router.push('/system/assignAuth?id=' + row.id + '&roleName=' + row.roleName)
+    },
     // 追加ボタンん
     addRole() {
       this.dialogVisible = true
