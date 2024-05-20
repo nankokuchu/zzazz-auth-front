@@ -31,7 +31,14 @@
     </div>
     <!--検索エリアーEND-->
     <div class="tools-div">
-      <el-button type="success" icon="el-icon-plus" size="mini" @click="addUser">追 加</el-button>
+      <el-button
+        type="success"
+        icon="el-icon-plus"
+        size="mini"
+        :disabled="!$hasBP('bnt.sysUser.addUser')"
+        @click="addUser"
+      >追 加
+      </el-button>
     </div>
     <!--検索エリアーEND-->
     <el-table
@@ -59,6 +66,7 @@
         <template v-slot="scope">
           <el-switch
             v-model="scope.row.status === 1"
+            :disabled="!$hasBP('bnt.sysUser.switchStatus')"
             @change="switchStatus(scope.row)"
           />
         </template>
@@ -67,9 +75,30 @@
 
       <el-table-column label="操作" align="center" fixed="right">
         <template v-slot="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" title="編集" @click="editUser(scope.row.id)" />
-          <el-button type="danger" icon="el-icon-delete" size="mini" title="削除" @click="removeDataById(scope.row.id)" />
-          <el-button type="warning" icon="el-icon-baseball" size="mini" title="ロール設定" @click="showAssignRole(scope.row)" />
+          <el-button
+            type="primary"
+            icon="el-icon-edit"
+            size="mini"
+            title="編集"
+            :disabled="!$hasBP('bnt.sysUser.editUser')"
+            @click="editUser(scope.row.id)"
+          />
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            size="mini"
+            title="削除"
+            :disabled="!$hasBP('bnt.sysUser.removeDataById')"
+            @click="removeDataById(scope.row.id)"
+          />
+          <el-button
+            type="warning"
+            icon="el-icon-baseball"
+            size="mini"
+            title="ロール設定"
+            :disabled="!$hasBP('bnt.sysUser.showAssignRole')"
+            @click="showAssignRole(scope.row)"
+          />
         </template>
       </el-table-column>
     </el-table>
@@ -109,12 +138,13 @@
     <el-dialog title="ロール設定" :visible.sync="dialogRoleVisible">
       <el-form label-width="100px">
         <el-form-item label="ユーザー名">
-          <el-input disabled :value="sysUser.username"></el-input>
+          <el-input disabled :value="sysUser.username" />
         </el-form-item>
 
         <el-form-item label="ロール名">
-          <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全て</el-checkbox>
-          <div style="margin: 15px 0;"></div>
+          <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">全て
+          </el-checkbox>
+          <div style="margin: 15px 0;" />
           <el-checkbox-group v-model="userRoleIds" @change="handleCheckedChange">
             <el-checkbox v-for="role in allRoles" :key="role.id" :label="role.id">{{ role.roleName }}</el-checkbox>
           </el-checkbox-group>
@@ -170,7 +200,7 @@ export default {
 
   // lifeMethod
   mounted() {
-    console.log('list mounted......')
+    console.log('.......')
   },
 
   methods: {
