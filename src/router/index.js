@@ -37,11 +37,11 @@ export const constantRoutes = [
     hidden: true
   },
 
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
+  // {
+  //   path: '/404',
+  //   component: () => import('@/views/404'),
+  //   hidden: true
+  // },
 
   {
     path: '/',
@@ -55,45 +55,45 @@ export const constantRoutes = [
     }]
   },
 
-  {
-    path: '/system',
-    component: Layout,
-    redirect: '/system/sysRole',
-    name: 'System',
-    alwaysShow: true,
-    meta: { title: 'システム管理', icon: 'el-icon-s-tools' },
-    children: [
-      {
-        path: 'sysUser',
-        name: 'SysUser',
-        component: () => import('@/views/system/sysUser/list'),
-        meta: { title: 'ユーザー管理', icon: 'el-icon-s-custom' }
-      },
-      {
-        path: 'sysRole',
-        name: 'SysRole',
-        component: () => import('@/views/system/sysRole/list'),
-        meta: { title: 'ユーザーロール管理', icon: 'el-icon-user-solid' }
-      },
-      // メニュー追加
-      {
-        path: 'sysMenu',
-        name: 'sysMenu',
-        component: () => import('@/views/system/sysMenu/list'),
-        meta: { title: 'メニュー管理', icon: 'el-icon-user-solid' }
-      },
-      // メニューとユーザーロール
-      {
-        path: 'assignAuth',
-        component: () => import('@/views/system/sysRole/assignAuth'),
-        meta: {
-          activeMenu: '/system/sysRole',
-          title: 'ユーザーロール'
-        },
-        hidden: true
-      }
-    ]
-  },
+  // {
+  //   path: '/system',
+  //   component: Layout,
+  //   redirect: '/system/sysRole',
+  //   name: 'System',
+  //   alwaysShow: true,
+  //   meta: { title: 'システム管理', icon: 'el-icon-s-tools' },
+  //   children: [
+  //     {
+  //       path: 'sysUser',
+  //       name: 'SysUser',
+  //       component: () => import('@/views/system/sysUser/list'),
+  //       meta: { title: 'ユーザー管理', icon: 'el-icon-s-custom' }
+  //     },
+  //     {
+  //       path: 'sysRole',
+  //       name: 'SysRole',
+  //       component: () => import('@/views/system/sysRole/list'),
+  //       meta: { title: 'ユーザーロール管理', icon: 'el-icon-user-solid' }
+  //     },
+  //     // メニュー追加
+  //     {
+  //       path: 'sysMenu',
+  //       name: 'sysMenu',
+  //       component: () => import('@/views/system/sysMenu/list'),
+  //       meta: { title: 'メニュー管理', icon: 'el-icon-user-solid' }
+  //     },
+  //     // メニューとユーザーロール
+  //     {
+  //       path: 'assignAuth',
+  //       component: () => import('@/views/system/sysRole/assignAuth'),
+  //       meta: {
+  //         activeMenu: '/system/sysRole',
+  //         title: 'ユーザーロール'
+  //       },
+  //       hidden: true
+  //     }
+  //   ]
+  // },
 
   // {
   //   path: '/example',
@@ -201,7 +201,7 @@ export const constantRoutes = [
   // },
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({
