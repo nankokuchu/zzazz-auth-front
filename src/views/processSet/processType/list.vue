@@ -39,14 +39,14 @@
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <el-button
-            type="text"
+            type="primary"
             size="mini"
             :disabled="$hasBP('bnt.processType.update') === false"
             @click="edit(scope.row.id)"
           >更 新
           </el-button>
           <el-button
-            type="text"
+            type="danger"
             size="mini"
             :disabled="$hasBP('bnt.processType.remove') === false"
             @click="removeDataById(scope.row.id)"
@@ -131,7 +131,7 @@ export default {
     },
     // idで削除
     removeDataById(id) {
-      this.$confirm('でーたを削除しますか?', '提示', {
+      this.$confirm('データを削除しますか?', '提示', {
         confirmButtonText: '確定',
         cancelButtonText: 'キャンセル',
         type: 'warning'
@@ -168,7 +168,7 @@ export default {
     // insert
     saveData() {
       api.save(this.processType).then(response => {
-        this.$message.success(response.message || '操作成功')
+        this.$message.success(response.message || '保存成功')
         this.dialogVisible = false
         this.fetchData(this.page)
       })
@@ -176,7 +176,7 @@ export default {
     // idでupdate
     updateData() {
       api.updateById(this.processType).then(response => {
-        this.$message.success(response.message || '操作成功')
+        this.$message.success(response.message || 'アップデート成功')
         this.dialogVisible = false
         this.fetchData(this.page)
       })
