@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-    <h1>ユーザー管理</h1>
     <div class="search-div">
       <el-form label-width="100px" size="small">
         <el-row>
@@ -35,8 +34,8 @@
         type="success"
         icon="el-icon-plus"
         size="mini"
-        :disabled="!$hasBP('bnt.sysUser.addUser')"
-        @click="addUser"
+        :disabled="!$hasBP('bnt.sysUser.add')"
+        @click="add"
       >追 加
       </el-button>
     </div>
@@ -66,12 +65,12 @@
         <template v-slot="scope">
           <el-switch
             v-model="scope.row.status === 1"
-            :disabled="!$hasBP('bnt.sysUser.switchStatus')"
+            :disabled="$hasBP('bnt.sysUser.switchStatus')"
             @change="switchStatus(scope.row)"
           />
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="CREAT-TIME" />
+      <el-table-column prop="createTime" label="作成時間" />
 
       <el-table-column label="操作" align="center" fixed="right">
         <template v-slot="scope">
@@ -80,7 +79,7 @@
             icon="el-icon-edit"
             size="mini"
             title="編集"
-            :disabled="!$hasBP('bnt.sysUser.editUser')"
+            :disabled="$hasBP('bnt.sysUser.edit')"
             @click="editUser(scope.row.id)"
           />
           <el-button
@@ -88,7 +87,7 @@
             icon="el-icon-delete"
             size="mini"
             title="削除"
-            :disabled="!$hasBP('bnt.sysUser.removeDataById')"
+            :disabled="$hasBP('bnt.sysUser.remove')"
             @click="removeDataById(scope.row.id)"
           />
           <el-button
@@ -96,7 +95,7 @@
             icon="el-icon-baseball"
             size="mini"
             title="ロール設定"
-            :disabled="!$hasBP('bnt.sysUser.showAssignRole')"
+            :disabled="$hasBP('bnt.sysUser.showAssignRole')"
             @click="showAssignRole(scope.row)"
           />
         </template>
@@ -218,7 +217,7 @@ export default {
       this.searchObj = {}
       this.fetchData()
     },
-    addUser() {
+    add() {
       this.sysUser = {}
       this.dialogVisible = true
     },

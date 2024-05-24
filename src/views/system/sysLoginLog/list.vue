@@ -74,9 +74,10 @@ export default {
       list: [], // 取得したデータを保管する
       total: 0, // 全ページ数
       page: 1, // currentページ、デフォルトは1にする
-      size: 5, // ページの容量、デフォルトは2にする
+      size: 10, // ページの容量、デフォルトは2にする
       searchObj: {}, // 条件で探すデータ、Objectで表示
-      dialogVisible: false
+      dialogVisible: false,
+      createTimes: []
     }
   },
   // lifeMethod
@@ -88,6 +89,7 @@ export default {
     resetData() {
       // inputをリッセット
       this.searchObj = {}
+      this.createTimes = []
       // 表示をリセット
       this.fetchData()
     },

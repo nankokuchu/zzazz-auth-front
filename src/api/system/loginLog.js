@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// メニューに関するAPI
+// ログインログに関すAPI
 const API_PATH = '/admin/system/sysLoginLog'
 
 export default {
