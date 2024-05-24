@@ -37,5 +37,11 @@ export default {
       url: `${API_PATH}/remove/${id}`,
       method: 'delete'
     })
+  },
+  publish(id) {
+    return request({
+      url: `${API_PATH}/publish/${id}`,
+      method: 'get'
+    })
   }
 }

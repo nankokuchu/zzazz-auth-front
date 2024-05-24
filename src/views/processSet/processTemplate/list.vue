@@ -30,7 +30,7 @@
       </el-table-column>
       iconPath
       <el-table-column prop="name" label="認証名称" />
-      <el-table-column label="アイコン">
+      <el-table-column label="アイコン" width="80">
         <template v-slot="scope">
           <img :src="scope.row.iconUrl" style="width: 30px;height: 30px;vertical-align: text-bottom;">
         </template>
@@ -39,8 +39,17 @@
       <el-table-column prop="description" label="説明" />
       <el-table-column prop="createTime" label="作成時間" />
       <el-table-column prop="updateTime" label="更新時間" />
-      <el-table-column label="操作" width="250" align="center">
+      <el-table-column label="操作" width="500" align="center">
         <template v-slot="scope">
+          <el-button type="success" size="mini" @click="show(scope.row)">認証設定確認</el-button>
+          <el-button
+            v-if="scope.row.status === 0"
+            type="warning"
+            size="mini"
+            :disabled="$hasBP('bnt.processTemplate.publish') === false"
+            @click="publish(scope.row.id)"
+          >公開
+          </el-button>
           <el-button
             type="primary"
             size="mini"
@@ -69,6 +78,26 @@
       @current-change="fetchData"
       @size-change="changeSize"
     />
+    <el-dialog title="認証設定確認" :visible.sync="formDialogVisible" width="30%">
+      <h3>基本情報</h3>
+      <el-divider />
+      <el-form ref="flashPromotionForm" label-width="150px" size="small" style="padding-right: 40px;">
+        <el-form-item label="認証タイプ" style="margin-bottom: 0;">{{ processTemplate.processTypeName }}</el-form-item>
+        <el-form-item label="認証名称" style="margin-bottom: 0;">{{ processTemplate.name }}</el-form-item>
+        <el-form-item label="作成時間" style="margin-bottom: 0;">{{ processTemplate.createTime }}</el-form-item>
+      </el-form>
+      <h3>フォーム情報</h3>
+      <el-divider />
+      <div>
+        <form-create
+          :rule="rule"
+          :option="option"
+        />
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="formDialogVisible = false">キャンセル</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -82,7 +111,12 @@ export default {
       total: 0,
       page: 1,
       limit: 10,
-      searchObj: {}
+      searchObj: {},
+
+      rule: [],
+      option: {},
+      processTemplate: {},
+      formDialogVisible: false
     }
   },
   created() {
@@ -92,6 +126,18 @@ export default {
     console.log('....mounted')
   },
   methods: {
+    publish(id) {
+      api.publish(id).then(response => {
+        this.$message.success('公開しました!!!!')
+        this.fetchData(this.page)
+      })
+    },
+    show(row) {
+      this.rule = JSON.parse(row.formProps)
+      this.option = JSON.parse(row.formOptions)
+      this.processTemplate = row
+      this.formDialogVisible = true
+    },
     changeSize(size) {
       this.limit = size
       this.fetchData(1)
