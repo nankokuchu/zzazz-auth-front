@@ -51,6 +51,7 @@
           >公開
           </el-button>
           <el-button
+            v-if="scope.row.status === 0"
             type="primary"
             size="mini"
             :disabled="$hasBP('bnt.processTemplate.templateSet') === false"
@@ -58,6 +59,7 @@
           >認証設定更新
           </el-button>
           <el-button
+            v-if="scope.row.status === 0"
             type="danger"
             size="mini"
             :disabled="$hasBP('bnt.processTemplate.remove') === false"
